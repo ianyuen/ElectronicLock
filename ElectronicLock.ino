@@ -11,7 +11,9 @@ void setup() {
 	Serial.begin(9600);
 	SPI.begin();
 	rfid.PCD_Init();
-	digitalWrite(LOCK_PIN, HIGH);
+
+	pinMode(LOCK_PIN, OUTPUT);
+	digitalWrite(LOCK_PIN, LOW);
 }
 
 void loop() {
@@ -28,10 +30,13 @@ void loop() {
 	Serial.println(strID);
 
 	if (strID.indexOf("D0:E1:0B:18") >= 0) {
-    Serial.println("Lock");
+		Serial.println("true key, unlock");
 		digitalWrite(LOCK_PIN, HIGH);
 		delay(10000);
+		Serial.println("time out, lock");
 		digitalWrite(LOCK_PIN, LOW);
+	} else {
+		Serial.println("wrong key, lock");
 	}
  
 	rfid.PICC_HaltA();
